@@ -1,0 +1,91 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="AccentureAcademyBookstoreModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityContainer Name="AccentureAcademyBookstoreEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Author" EntityType="AccentureAcademyBookstoreModel.Author" />
+    <EntitySet Name="Book" EntityType="AccentureAcademyBookstoreModel.Book" />
+    <EntitySet Name="Genre" EntityType="AccentureAcademyBookstoreModel.Genre" />
+    <EntitySet Name="Publisher" EntityType="AccentureAcademyBookstoreModel.Publisher" />
+    <AssociationSet Name="FK_GENRE" Association="AccentureAcademyBookstoreModel.FK_GENRE">
+      <End Role="Genre" EntitySet="Genre" />
+      <End Role="Book" EntitySet="Book" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PUBLISHER" Association="AccentureAcademyBookstoreModel.FK_PUBLISHER">
+      <End Role="Publisher" EntitySet="Publisher" />
+      <End Role="Book" EntitySet="Book" />
+    </AssociationSet>
+    <AssociationSet Name="WrittenBy" Association="AccentureAcademyBookstoreModel.WrittenBy">
+      <End Role="Author" EntitySet="Author" />
+      <End Role="Book" EntitySet="Book" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Author">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="AuthorName" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Book" Relationship="AccentureAcademyBookstoreModel.WrittenBy" FromRole="Author" ToRole="Book" />
+  </EntityType>
+  <EntityType Name="Book">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Title" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="Descripcion" Type="String" MaxLength="2000" FixedLength="false" Unicode="false" />
+    <Property Name="Publisher_Id" Type="Int32" Nullable="false" />
+    <Property Name="Genre_Id" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Genre" Relationship="AccentureAcademyBookstoreModel.FK_GENRE" FromRole="Book" ToRole="Genre" />
+    <NavigationProperty Name="Publisher" Relationship="AccentureAcademyBookstoreModel.FK_PUBLISHER" FromRole="Book" ToRole="Publisher" />
+    <NavigationProperty Name="Author" Relationship="AccentureAcademyBookstoreModel.WrittenBy" FromRole="Book" ToRole="Author" />
+  </EntityType>
+  <EntityType Name="Genre">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Genero" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="false" />
+    <Property Name="Descripcion" Type="String" MaxLength="2000" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Book" Relationship="AccentureAcademyBookstoreModel.FK_GENRE" FromRole="Genre" ToRole="Book" />
+  </EntityType>
+  <EntityType Name="Publisher">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Book" Relationship="AccentureAcademyBookstoreModel.FK_PUBLISHER" FromRole="Publisher" ToRole="Book" />
+  </EntityType>
+  <Association Name="FK_GENRE">
+    <End Type="AccentureAcademyBookstoreModel.Genre" Role="Genre" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="AccentureAcademyBookstoreModel.Book" Role="Book" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Genre">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Book">
+        <PropertyRef Name="Genre_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PUBLISHER">
+    <End Type="AccentureAcademyBookstoreModel.Publisher" Role="Publisher" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="AccentureAcademyBookstoreModel.Book" Role="Book" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Publisher">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Book">
+        <PropertyRef Name="Publisher_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="WrittenBy">
+    <End Type="AccentureAcademyBookstoreModel.Author" Role="Author" Multiplicity="*" />
+    <End Type="AccentureAcademyBookstoreModel.Book" Role="Book" Multiplicity="*" />
+  </Association>
+</Schema>

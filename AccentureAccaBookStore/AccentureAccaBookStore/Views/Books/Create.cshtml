@@ -1,0 +1,90 @@
+﻿@using AccentureAccaBookStore.Models
+@model Book
+
+@{
+    ViewBag.Title = "Create";
+}
+
+@{
+    AccentureAcademyBookstoreEntities db = new AccentureAcademyBookstoreEntities();
+    List<Author> autores = db.Author.OrderBy(au => au.AuthorName).ToList();
+    List<Genre> generos = db.Genre.OrderBy(gn => gn.Genero).ToList();
+}
+
+    <script>
+    function nuevoAutor() {
+        var lista = document.getElementById("listaAut");
+        var select = lista.firstElementChild;
+        var copiaSelect = select.cloneNode(true);
+        copiaSelect.selectedIndex = 0;
+        lista.appendChild(copiaSelect);
+    }
+    </script>
+
+<h2>New</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+    <h4>Book</h4>
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Author, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div id="listaAut">
+            <div class="form-group">
+                <div class="col-md-10">
+                    @Html.DropDownList("Author_Id", null, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Author, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            @*@Html.EditorFor(au=>au.Author.AuthorName, new { htmlAttributes = new { @class = "form-control", type = "text", placeholder = "ingrese el titulo del libro" } })*@
+        </div>
+    </div>
+    <div class="text-right"><a onclick="nuevoAutor()" class="btn btn-link">Otro autor...</a></div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Descripcion, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div>
+            @Html.TextAreaFor(model => model.Descripcion, new { htmlAttributes = new { @class = "form-control-lg", rows = "6", placeholder = "Escriba aqui su descripcion del Libro" } })
+            @Html.ValidationMessageFor(model => model.Descripcion, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Publisher_Id, "Publisher", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.DropDownList("Publisher_Id", null, htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Publisher_Id, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Genre_Id, "Genre", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.DropDownList("Genre_Id", null, htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Genre_Id, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Create" class="btn btn-success" />
+        </div>
+    </div>
+</div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
